@@ -148,10 +148,10 @@ and am looking to eventually track both Kills and Deaths outside.
 *rolled Kill Counter to the latest API version
 
 2.2.1
-*Fixed an issue caused my an outdated version of LibMainMenu
-*fixed issue with current session KDR difference color code. The color is green when a lot above your KDR, Red when a lot below, and yellow when within 70% (above or below)
-*Added current Kills table to current session tab. Note: Known issue with this tab, sometimes it will show an extra death on certain rows/players under certain circumstances.
-*Removed all archived Kill Counter versions from before 2015
+- Fixed an issue caused my an outdated version of LibMainMenu
+- fixed issue with current session KDR difference color code. The color is green when a lot above your KDR, Red when a lot below, and yellow when within 70% (above or below)
+- Added current Kills table to current session tab. Note: Known issue with this tab, sometimes it will show an extra death on certain rows/players under certain circumstances.
+- Removed all archived Kill Counter versions from before 2015
 
 
 Update 2.7.0 includes a substantial transformation of your Kill Statistics. If you find your existing history to be of extreme importance to you, then I recommend backing it up just in case (By default the information is located at \Documents\Elder Scrolls Online\live\SavedVariables\Killcounter.lua). I've tested a few languages, and multiple sets of data, but there's always a chance something really screwy exists in your data. If something goes wrong, I'd be glad to help you in the comments.
