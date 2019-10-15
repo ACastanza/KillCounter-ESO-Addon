@@ -1,4 +1,8 @@
 # KillCounter ESO Addon
+## Planned Updates
+- Searching Kills, this is far down the line but still being worked on
+- Background image changes for the menu
+- Dueling Mode, being looked into
 
 ## UPDATE LOG
 3.2.3
@@ -26,30 +30,23 @@
 - Updated the background for information
 - Updated the stat bar to not have cross colors
 
-* Possible Future Updates:
-- Searching Kills, this is far down the line but still being worked on
-- Background image changes for the menu
-- Dueling Mode, being looked into
-
 3.2.0
-* Fixed / changed a few kill counter elements
+- Fixed / changed a few kill counter elements
 - Kill Counter /kc on stat bar is no longer transparent. This is to help visibility in Cyrodiil and modernize it.
-* May add a settings option for this
-
 - Changed the Killers tab so that it no longer displays levels. Levels would require a lot of data updating and not update all old player data so this is removed from the table and added Kills To Them so you can easily view Kills From / To the player in the Killers Table
 
 Bug Fixes
 - Potentially fixed stats displaying `T` error in housing.
 
 3.1.5b
-* fixed error message
+- fixed error message
 Code:
 [LAM2] The panel with id 'KillCounterConfig' was registered before addon loading has completed. This might break the AddOn Settings menu.
 3.1.5a
-* Added another option in panel to view stats quickly
+- Added another option in panel to view stats quickly
 
 3.1.5
-* Added the start of the Settings->Addon panel, for now this just has a button to open /kc settings
+- Added the start of the Settings->Addon panel, for now this just has a button to open /kc settings
 - Added another option in settings to disable kill counter stats bar entirely while in cyrodiil or battlegrounds
 
 Known Issues:
@@ -59,17 +56,17 @@ Upcoming (Hopefully - 3.2.0-3.2.5)
 - Working on un-embedding settings and moving to the panel. Kill Counter is old, so bare with me as I work through it
 
 3.1.0
-* Fixed an issue created in 3.0.1, the queue bar wouldn't have transparency
+- Fixed an issue created in 3.0.1, the queue bar wouldn't have transparency
 - Also fixed Stat Breakdown window and changed wording for Total Killers / Total Kills to Total Unique Killers / Total Unique Players Killed. This is so its understanding that its different than your actual overall.
 
 3.0.1
-* Dynamically fixed the bar to change size when AP is disabled.
+- Dynamically fixed the bar to change size when AP is disabled.
 - Fixed several old code left over
 - Deleted random numbers throwing errors
 - Fixed the issue with KC bar size randomly changing to default, if this issue comes back report it
 
 3.0.0
-* Addressed several bugs with kill counter and cleaned up the source code a bit more
+- Addressed several bugs with kill counter and cleaned up the source code a bit more
 - Kill Counter now has the ability to turn off AP on the stat bar. /kc settings Note, we do not force /reloadui, you must do this yourself Turning AP off doesn't shrink the bar. This is just for users who use AP meter. You can simply drag the extra bar off the screen.
 - Added /kc help which now displays all the commands for kill counter.
 - Changes the visuals on the bar minimally to help readability. This includes extending the bar
@@ -89,10 +86,10 @@ Wants (Requested and being worked on, TBD)
 - Moving /kc settings to the default Settings->Addon location
 
 2.7.6b
-* adjusted bar size to 405 from 420 should allow up to triple digits on everything and 7 digits on AP.
+- adjusted bar size to 405 from 420 should allow up to triple digits on everything and 7 digits on AP.
 
 2.7.6
-* Fixed minor issues
+- Fixed minor issues
 - Fixed the kill counter bar where AP numbers would go over transparency (Note, this makes the bar a little longer)
 - Confirmed that killing blows tab is counted, just only updated when logged off
 - Cleaned up some code
@@ -104,7 +101,7 @@ Wants (Requested and being worked on, TBD)
 - No fixes or updates yet
 
 2.7.4
-* Fixed the rank 50 issue and more - Special Thanks to Ghostbane, check out AP Meter: https://www.esoui.com/downloads/info1792-APMeter.html
+- Fixed the rank 50 issue and more - Special Thanks to Ghostbane, check out AP Meter: https://www.esoui.com/downloads/info1792-APMeter.html
 - Fixed an issue where K/D color on current session would show red when over 1.0
 - Fixed an issue where AP would not report at level 50+ Alliance rank
 - Fixed an issue KD in Current session would be "+3.3203" it now rounds to the nearest 2nd decimal place
@@ -120,7 +117,7 @@ Wants (Requested and being worked on, TBD)
 - Fixed an issue where AP on bar would go over the transparency
 
 2.7.1
-* Added new class support
+- Added new class support
 - Properly tracks Necromancer class while in Cyro/BGs.
 - Disabled Kill Counter outside of Cyrodiil/BG. KC was reporting only wins in duels and never losses. I disabled this
 and am looking to eventually track both Kills and Deaths outside.
