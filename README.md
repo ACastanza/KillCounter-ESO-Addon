@@ -5,30 +5,31 @@
 Fixed a minor mathematical bug.
 
 3.2.2
-Added K/D ratio levels in Current Sessions Tab
-God Mode (Gold) - 10+K/D
-Beast Mode (Orange ) - 5+K/D
-Super Mode (Blue) - 2.5+K/D
-.7-2.5 Green
-between .5-.7 Yellow
-below .5 Red
-Fixed Misspelling of Daggerfall
-Fixed Text Overlap
+- Added K/D ratio levels in Current Sessions Tab
+- God Mode (Gold) - 10+K/D
+- Beast Mode (Orange ) - 5+K/D
+- Super Mode (Blue) - 2.5+K/D
+- .7-2.5 Green
+- between .5-.7 Yellow
+- below .5 Red
+- Fixed Misspelling of Daggerfall
+- Fixed Text Overlap
 
 3.2.1
-Fixed a major bug where Sorcerer was reporting as Dragonknight and vice versa.
-Updated the KC Stat Bar to update on event instead of after event
-Removed VR levels
-Fixed blank class by making it say "duel". This is back when KC counted kills outside, but not deaths.
-Updated the GUI. Re-did all the icons to make them match their respective tab
-Updated the draw line visuals between each line.
-Updated the class colors on graphs
-Updated the background for information
-Updated the stat bar to not have cross colors
-Possible Future Updates:
-Searching Kills, this is far down the line but still being worked on
-Background image changes for the menu
-Dueling Mode, being looked into
+- Fixed a major bug where Sorcerer was reporting as Dragonknight and vice versa.
+- Updated the KC Stat Bar to update on event instead of after event
+- Removed VR levels
+- Fixed blank class by making it say "duel". This is back when KC counted kills outside, but not deaths.
+- Updated the GUI. Re-did all the icons to make them match their respective tab
+- Updated the draw line visuals between each line.
+- Updated the class colors on graphs
+- Updated the background for information
+- Updated the stat bar to not have cross colors
+
+* Possible Future Updates:
+- Searching Kills, this is far down the line but still being worked on
+- Background image changes for the menu
+- Dueling Mode, being looked into
 
 3.2.0
 * Fixed / changed a few kill counter elements
