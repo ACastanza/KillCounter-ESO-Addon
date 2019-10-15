@@ -92,7 +92,7 @@ local defaults = {
 }
 
 
---Kill Counter Global
+--Kill Counter Global -KC_G
 
 KC_G = {
    name = "KillCounter",
@@ -115,10 +115,28 @@ function KC_G.GetCurrentSession() return currentSession end
 
 function KC_G.TestMode() return test_mode end
 
+--Reporting using /kc report
 function KC_G.UpdateDisplayText()
    local KDratio = deathCounter > 0 and counter/deathCounter or counter
-   KillCounter_Kills:SetText(string.format("K/D:(%d/%d :%.1f) KB(%d) KBS(%d) Streak(%d) AP(%d)",
-					   counter, deathCounter,KC_Fn.round(KDratio, 2), kbCounter, kbStreak, streak, rankPointsGained))
+   if KC_Fn.CheckSetting("APBar") then
+      APOnBar()
+   else
+      APOffBar()
+   end
+end
+
+function APOnBar()
+   local KDratio = deathCounter > 0 and counter/deathCounter or counter
+   KillCounter_Kills:SetText(string.format("K/D[%d/%d : %.1f] KB[%d] KBS[%d] Streak[%d] AP[%d]", --To keep AP here AP(%d)
+   counter, deathCounter,KC_Fn.round(KDratio, 2), kbCounter, kbStreak, streak, rankPointsGained)) --rankPointsGained
+   KillCounter_Kills.anchorX = .5
+end
+
+function APOffBar()
+   local KDratio = deathCounter > 0 and counter/deathCounter or counter
+   KillCounter_Kills:SetText(string.format("K/D[%d/%d : %.1f] KB[%d] KBS[%d] Streak[%d]", --To keep AP here AP(%d)
+   counter, deathCounter,KC_Fn.round(KDratio, 2), kbCounter, kbStreak, streak)) --rankPointsGained
+   KillCounter_Kills.anchorPoint = .5
 end
 
 function KC_G.OnMoveStop()   
@@ -415,7 +433,7 @@ function KC_G.doDeathStreak()
 end
 
 do
-   local defaultSettings = {
+   defaultSettings = {
       Sounds = true,
       ChatKills = true,
       ChatSeiges = true, -- flag capture 50%
@@ -425,6 +443,8 @@ do
       ChatDStreak = true,
       ChatCapStreak = true,
       ignoreNPCDeath = false,
+      StatBar = true;
+      APBar = true;
       QueueLabel = true,
       AutoQueueAccept = true,
       ImperialDistrictFlags = false
@@ -437,6 +457,7 @@ do
       -- 4 Warden
       -- 5 Necromancer
       -- 6 Templar
+      -- 7 Battlemage (future class)
       [""] = 0,
       [GetClassName(GENDER_FEMALE,1)] = 1,
       [GetClassName(GENDER_FEMALE,2)] = 2,
@@ -444,18 +465,21 @@ do
       [GetClassName(GENDER_FEMALE,4)] = 4,
       [GetClassName(GENDER_FEMALE,5)] = 5,
       [GetClassName(GENDER_FEMALE,6)] = 6,
+      [GetClassName(GENDER_FEMALE,7)] = 7,
       [GetClassName(GENDER_MALE,1)] = 1,
       [GetClassName(GENDER_MALE,2)] = 2,
       [GetClassName(GENDER_MALE,3)] = 3,
       [GetClassName(GENDER_MALE,4)] = 4,
       [GetClassName(GENDER_MALE,5)] = 5,
       [GetClassName(GENDER_MALE,6)] = 6,
+      [GetClassName(GENDER_MALE,7)] = 7,
       [GetClassName(GENDER_NEUTER,1)] = 1,
       [GetClassName(GENDER_NEUTER,2)] = 2,
       [GetClassName(GENDER_NEUTER,3)] = 3,
       [GetClassName(GENDER_NEUTER,4)] = 4,
       [GetClassName(GENDER_NEUTER,5)] = 5,
       [GetClassName(GENDER_NEUTER,6)] = 6,
+      [GetClassName(GENDER_NEUTER,7)] = 7,
    }
    local function NeedsVariableUpdate(t)
       return t.killedBy ~= nil and t.killed ~= nil
@@ -510,7 +534,10 @@ do
    --function KC_OnAddOnLoaded(eventCode, addOnName)
    function KC_G.OnAddOnLoaded(eventCode, addOnName)
       if(addOnName ~= KC_G.name) then return end
-      
+      --Settings Panel Initializer 
+      if addOnName == KC_G.name then
+         KC_G.CreateConfigMenuX()
+      end
       KC_G.savedVars = ZO_SavedVars:New("KillCounter_Data", version, nil, defaults, nil)
       if KC_G.savedVars.settings == nil then 
 	 KC_G.savedVars.settings = {}      
@@ -580,10 +607,6 @@ function KC_G.initStreak()
    kb_streak_array[50] = "God of Death!"
    kb_streak_array[75] = "Obviously Cheating! REPORTED!"
 
-
-
-
-
    deathStreak_array[2] = "Honorless Death!"
    deathStreak_array[3] = "Dry Spell!"
    deathStreak_array[4] = "Unfair Disadvantage!"
@@ -606,13 +629,13 @@ function KC_G.OnCharacterLoad(eventCode, initialLoad)
 	    leave the OnKill function alive though because I find it
 	    funny and satisfying to get kill counter updates when
        killing allies in trials
-       -Cast, disabled this because duels inconsistency.
+       -Cast, disabled this because duels inconsistency. -- May create a dueling addition
 	 --]] 
 	 KC_G.eventsRegistered = true
 	 EVENT_MANAGER:RegisterForEvent(KC_G.name, EVENT_RETICLE_TARGET_CHANGED, KC_G.TargetChanged)
 	 EVENT_MANAGER:RegisterForEvent(KC_G.name, EVENT_AVENGE_KILL, KC_G.AvengeKill)
 	 EVENT_MANAGER:RegisterForEvent(KC_G.name, EVENT_REVENGE_KILL, KC_G.RevengeKill)
-	 EVENT_MANAGER:RegisterForEvent(KC_G.name, EVENT_RANK_POINT_UPDATE, KC_G.Experience_Update)
+	 EVENT_MANAGER:RegisterForEvent(KC_G.name, EVENT_ALLIANCE_POINT_UPDATE, KC_G.Experience_Update)
 	 EVENT_MANAGER:RegisterForEvent(KC_G.name, EVENT_PLAYER_DEAD, KC_G.OnKilled)	 
 	 -- Used to determine actual keep captures rather than just flag status
 	 EVENT_MANAGER:RegisterForEvent(KC_G.name, EVENT_KEEP_ALLIANCE_OWNER_CHANGED, SC_G.KeepOwnerChanged)
@@ -624,25 +647,30 @@ function KC_G.OnCharacterLoad(eventCode, initialLoad)
    else
       KC_G.hide()
       if KC_G.eventsRegistered then
-	 KC_G.eventsRegistered = false
-	 EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_RETICLE_TARGET_CHANGED)
-	 EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_AVENGE_KILL)
-	 EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_REVENGE_KILL)
-	 EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_RANK_POINT_UPDATE)
-	 EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_PLAYER_DEAD)
-	 -- Used to determine actual keep captures rather than just flag status
-	 EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_KEEP_ALLIANCE_OWNER_CHANGED)
-	 -- Flag flipping status
-	 EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_OBJECTIVE_CONTROL_STATE)
+	      KC_G.eventsRegistered = false
+	      EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_RETICLE_TARGET_CHANGED)
+	      EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_AVENGE_KILL)
+	      EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_REVENGE_KILL)
+	      EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_ALLIANCE_POINT_UPDATE)
+	      EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_PLAYER_DEAD)
+	      -- Used to determine actual keep captures rather than just flag status
+	      EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_KEEP_ALLIANCE_OWNER_CHANGED)
+	      -- Flag flipping status
+	      EVENT_MANAGER:UnregisterForEvent(KC_G.name, EVENT_OBJECTIVE_CONTROL_STATE)
       end
    end
    KC_G.UpdateDisplayText()
 end
 function KC_G.QueueExited(eventCode, campaignId, isGroup)
-   KillCounter:SetDimensions(350, 25)
    KillCounter_QueueStatus:SetText("")
    KillCounter_QueueStatus:SetAlpha(0.0)
    KillCounter_QueueStatus:SetHidden(true)
+
+   if KC_Fn.CheckSetting("APBar") then
+      KillCounter:SetDimensions(410, 25)
+   else
+      KillCounter:SetDimensions(350, 25)
+   end
 end
 function KC_G.QueueEntered(eventCode, campaignId, isGroup, position)
    KC_G.show(true)
@@ -699,6 +727,7 @@ function KC_G.AutoQueueAccept(activate)
 end
 --function KC_OnInitialized(self)
 function KC_G.OnInitialized(self)
+   --panelData Settings->Addon
    --if addOnName ~="KillCounter" then return end
    --Register on the top level control...
    EVENT_MANAGER:RegisterForEvent(KC_G.name, EVENT_COMBAT_EVENT, KC_G.OnKillingBlow)
@@ -729,7 +758,9 @@ function KC_G.OnInitialized(self)
       counter = 0
       deathCounter = 0
       streak = 0
+      kbStreak = 0
       deathStreak = 0
+      rankPointsGained = 0
       SC_G.resetStreaks()
 
       if extra == "full" then
@@ -742,10 +773,19 @@ function KC_G.OnInitialized(self)
 
    end
 
-
    --General purpose kc command
    SLASH_COMMANDS["/kc"] = function (extra)
-      if string.lower(extra) == "toggle" then
+      if string.lower(extra) == "help" then
+         d("/kc on - turns on the kc stat bar")
+         d("/kc off - turns off the kc stat bar")
+         d("/kc settings - opens the settings menu")
+         d("/kcreport - creates a report of current stats")
+         d("/kcreset - reset current stats")
+         d("/kc stats - shows stats menu")
+         d("/kc ooc - toggles out of combat messages")
+         d("/kc sounds - toggles sounds")
+   -- depricated function call
+      elseif string.lower(extra) == "toggle" then
 	 d("\"/kc toggle\" has been removed, please use \"/kc on/off\"")
 	 -- KC_G.toggle(overrideHideMain)
       elseif string.lower(extra) == "on" then
@@ -876,8 +916,8 @@ function KC_G.OnInitialized(self)
    end
 
    SC_G.slashCommands()
-
-   SLASH_COMMANDS["/kctest1337"] = function (extra)
+--/kctest1337
+--SLASH_COMMANDS["/kctest1337"] = function (extra)
       -- reset counter
       --PlaySound(SOUNDS.LOCKPICKING_BREAK)
       --PlaySound(SOUNDS.LEVEL_UP) high kill streaks
@@ -893,28 +933,30 @@ function KC_G.OnInitialized(self)
       --d(KC_G.savedVars.players)a
       --d(KC_G.savedVars.kbSpells)
       --CHAT_SYSTEM:StartTextEntry("dd", CHAT_CATEGORY_SAY)
-      test_mode = true
+      --test_mode = true
       --d(KC_G.savedVars.kills['Landymac'].Seige_Kills)
+
+--end
+   SLASH_COMMANDS["/kc help"] = function (extra)
+
+
    end
 
    KC_G.initStreak()
    SC_G.initStreak()
 end
 
+
 --[[]]
-function KC_G.Experience_Update(eventCode, unitTag, rankPoints, diff)
+function KC_G.Experience_Update(eventCode, alliancePoints, playSound, diff, reason)
+
    if KC_G.savedVars == nil then return end
-   
-   --d("------AP------", unitTag, rankPoints, diff, "------AP------")
-   if unitTag == 'player' and KC_G.savedVars.rankPointsGained ~= nil then
-      --GetUnitRankPoints
+   --ALLIANCE POINTS CALL
+   if reason ~= CURRENCY_CHANGE_REASON_BANK_WITHDRAWAL and reason ~= CURRENCY_CHANGE_REASON_VENDOR then
       rankPointsGained = rankPointsGained + diff
       KC_G.savedVars.rankPointsGained = KC_G.savedVars.rankPointsGained + diff
-      --d(diff .. " ap gained", rankPointsGained)
    end
-
-
-   
+   KC_G.UpdateDisplayText()
 end
 
 function KC_G.Veteran_Update(eventCode, currxp, maxxp, reason, s )
@@ -1048,15 +1090,52 @@ function KC_G.toggle(display_bool)
    -- end
 end
 
+--SHOW FUNCTION - Dynamically programmed to change size if they turn AP off
 function KC_G.show(showQueue) 
-   KillCounter:SetHidden(false)
-   KillCounter:SetAlpha(1.0)
+   if KC_Fn.CheckSetting("APBar") then
+      APBarStatBarTrue()
+      APBarTStatBarF()
+   else
+      APBarFStatBarT()
+      APBarFStatBarF()
+   end   
    if showQueue then
-      KillCounter:SetDimensions(350, 50)
+      KillCounter:SetDimensions(410, 50)
       KillCounter_QueueStatus:SetAlpha(1.0)
       KillCounter_QueueStatus:SetHidden(false)
    end
 end
+-- Below are functions that were requested, 
+-- the ability to turn kill counter stat bar off while in pvp
+function APBarStatBarTrue()
+   if KC_Fn.CheckSetting("APBar") and KC_Fn.CheckSetting("StatBar") then
+      KillCounter:SetHidden(false)
+      KillCounter:SetAlpha(1.0)
+      KillCounter:SetDimensions(410, 25)
+   end
+end
+
+function APBarFStatBarT()
+   if not KC_Fn.CheckSetting("APBar") and KC_Fn.CheckSetting("StatBar") then
+      KillCounter:SetHidden(false)
+      KillCounter:SetAlpha(1.0)
+      KillCounter:SetDimensions(335, 25)
+   end
+end
+
+function APBarTStatBarF()
+   if  KC_Fn.CheckSetting("APBar") and not KC_Fn.CheckSetting("StatBar") then
+      KC_G.hide()
+   end
+end
+
+function APBarFStatBarF()
+   if not KC_Fn.CheckSetting("APBar") and not KC_Fn.CheckSetting("StatBar") then
+      KillCounter:SetDimensions(335, 25)
+      KC_G.hide()
+   end
+end
+
 
 
 --function KC_hide()

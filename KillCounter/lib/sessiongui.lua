@@ -24,7 +24,7 @@ function KC_G.sessionWindowGUISetup()
    tlw.DataLines = {}
    tlw.Lines = {}
    tlw:SetHeight(268)
-   tlw:SetWidth(345)
+   tlw:SetWidth(300)
    tlw:SetAnchor(TOPLEFT,Scene_KC_Menu_Session,TOPLEFT,20,30)
    tlw:SetDrawLayer(DL_BACKGROUND)
    tlw:SetMouseEnabled(true)
@@ -50,7 +50,7 @@ function KC_G.sessionWindowGUISetup()
 
    for i=1,tlw.MaxLines do
       tlw.Lines[i] = WINDOW_MANAGER:CreateControlFromVirtual("KillCounter_Session_Line_" .. i, tlw, "KillCounter_Overview_Line")
-      tlw.Lines[i]:SetDimensions(tlw:GetWidth()-10,30)
+      tlw.Lines[i]:SetDimensions(tlw:GetWidth()-8,30)
       if i == 1 then
 	 tlw.Lines[i]:SetAnchor(TOPLEFT,tlw,TOPLEFT,5,5)
       else
@@ -222,7 +222,7 @@ function KC_G.sessionWindowGUISetup()
 	    oy = 3
 	    
 	 end
-	 tkw.Lines[i].Columns[j]:SetDimensions(tkw.Lines[i]:GetWidth()/6,25)
+	 tkw.Lines[i].Columns[j]:SetDimensions(tkw.Lines[i]:GetWidth()/6,25) --no
 	 if i==1 then
 	    local sw, wh = tkw.Lines[i].Columns[j]:GetTextDimensions()
 	    --d(wh)
@@ -259,9 +259,6 @@ function KC_G.sessionWindowGUISetup()
 	    if j ~= 1 and i == 2 and j == 6 then
 	       offx = offx + 18
 	    end
-
-
-
 
 
 	    tkw.Lines[i].Columns[j]:SetAnchor(TOPLEFT,tkw.Lines[i-1].Columns[j],BOTTOMLEFT,offx,oy)
@@ -440,30 +437,63 @@ function ParseKillTable(killed, killedBy)
 end
 
 
-
+--[[This is the `Current Sessions Tab`]]
 function KC_G.updateSessionGui()
 
    local session = KC_G.GetCurrentSession()
-   local kdr = KC_G.GetCounter()
-   if KC_G.GetDeathCounter() > 0 then kdr = kdr / KC_G.GetDeathCounter() end
-   --find fidd between normal kdr
-   local okdr = KC_G.savedVars.totalKills
-   if KC_G.savedVars.totalDeaths > 0 then okdr = okdr / KC_G.savedVars.totalDeaths end
+	local kdr = KC_G.GetCounter()
+
+	--rounding the decimal to nearest 1 for readability
+	--if KC_G.GetDeathCounter() > 0 then kdr = floor(((kdr/KC_G.GetDeathCounter())*10^1 +0.5)/10^1) end
+	--	if KC_G.GetDeathCounter() > 0 then kdr = math.round((kdr / KC_G.GetDeathCounter())*10)*0.1 end
+	if KC_G.GetDeathCounter() > 0 then kdr = KC_Fn.round((kdr / KC_G.GetDeathCounter()), 2) end
+	--find fidd between normal kdr
+
+
    local ap = KC_G.GetAP()
-   local diff = kdr - okdr
+	--yellow == 70% or below...easy pz
+	local threshold = .70 --Within 70% of the kdr
+	local godMode = 10.0 -- gold plat F9FAA4
+	local beastMode = 5.0 -- orange #ff8000
+	local superMode = 2.5 --blue #0070dd
 
-   local color = "|CFFFF00 "--yellow
+	if kdr >= threshold and kdr < superMode then
+		 color = "|C00FF00" --green
+	elseif kdr >= superMode and kdr < beastMode then
+		 color = "|C0070dd" 
+	elseif kdr >= beastMode and kdr < godMode then
+		color = "|Cff8000"
+	elseif kdr >= godMode then
+		color = "|CF9FAA4"
+	elseif kdr <= threshold and kdr >= .50 or kdr == 0 then
+		 color = "|CFFFF00"  -- yellow
+	elseif kdr >= godMode then
+		color = "|CCCAA1A"
+	else
+		color = "|CFF0000" -- red
+	end
+
+
+--[[
+	--The commented out section is for showing the difference between avg K/D and current
+   local okdr = KC_G.GetCounter()
+   local diff = kdr / okdr
    local diffabs = math.abs(diff)
-   local threshold = okdr * .3 --Within 70% of the kdr
-   if diffabs > threshold then
-      if diff > 0 then color = "|C00FF00 +"
-      else color = "|CFF0000 " end
-   else
-      if diff > 0 then color = color .. "+" end
-   end
+   if diffabs >= threshold then
+		color = "|C00FF00 +" -- green
+   elseif diffabs <= threshold or diffabs == 0 then
+		color = "|CFFFF00"  -- yellow
+	  else 
+		color = "|CFF0000" --red
+	end
+	else
+	  if diff > 0 then color = color .. "+" 
+	end
+	]]
 
-   --combine stringswa
-   local kdrstring = KC_Fn.round(kdr, 2) .. " (" .. color .. KC_Fn.round(diff, 2) .. "|r )"
+	--combine stringswa
+
+   local kdrstring = color .. kdr --.. " (" .. color .. KC_Fn.round(diff, 2) .. "|r )"
    for i=1,session_table.MaxLines do
       for j=1,session_table.MaxColumns do 
 	 if i==1 then

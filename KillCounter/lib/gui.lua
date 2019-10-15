@@ -28,8 +28,8 @@ local showingSettings = false
 -- 4 Warden
 -- 5 Necromancer
 -- 6 Templar
-local KC_CLASS_SORCERER = 1
-local KC_CLASS_DRAGONKNIGHT = 2 
+local KC_CLASS_DRAGONKNIGHT = 1
+local KC_CLASS_SORCERER = 2
 local KC_CLASS_NIGHTBLADE = 3
 local KC_CLASS_WARDEN = 4 
 local KC_CLASS_NECROMANCER = 5
@@ -52,6 +52,51 @@ local LMM = LibStub("LibMainMenu")
 
 function KC_G.showingStats() return showingStats end
 function KC_G.showingSettings() return showingSettings end
+--Creating a panel for peopel to easily access the settings 
+--thats heavily embedded in the code
+function KC_G.CreateConfigMenuX()
+   local LAM2 = LibStub("LibAddonMenu-2.0")
+
+   local panelData = {
+       type = "panel",
+       name = "Kill Counter",
+       displayName = "|cdb1414Kill Counter|r",
+       author = "Casterial",
+       version = "3.2.3",
+       website = 'https://www.esoui.com/downloads/info337-KillCounter.html'
+   }
+   LAM2:RegisterAddonPanel(KC_G.name.."Config", panelData)
+   local optionsData = {
+   -- GENERAL SECTION: 
+   [1] = 
+       {
+           type = "header",
+           name = "Open Kill Counter Windows",
+       }, 
+   [2] = 
+      {
+         type = "button",
+         name = "Settings",
+         tooltip = "/kc settings",
+         width = "full",
+        func = function()
+            KC_G.showSettings()
+        end
+      },
+   [3] = 
+      {
+         type = "button",
+         name = "Stats",
+         tooltip = "/kc stats",
+         width = "full",
+        func = function()
+            KC_G.showStats()
+        end
+      },
+   }
+   LAM2:RegisterOptionControls(KC_G.name.."Config", optionsData)	
+
+end
 
 
 function KC_G.settingsWindowGUISetup()
@@ -67,6 +112,8 @@ function KC_G.settingsWindowGUISetup()
       {"Deaths Alerts", "ChatDeaths"},
       {"Death Streak Alerts", "ChatDStreak"},
       {"Ignore NPC Deaths", "ignoreNPCDeath"},
+      {"AP On Bar (/reloadui needed)", "APBar"},
+      {"Display Stats Bar (/reloadui needed)", "StatBar"},
       {"Active Queue Information", "QueueLabel", KC_G.QueueControl },
       {"Automatic Cyrodiil Queue Accept", "AutoQueueAccept", KC_G.AutoQueueAccept }
    }
@@ -142,7 +189,7 @@ function KC_G.settingsWindowGUISetup()
 					    -- Call the functionHandler if defined
 					    if p[3] then p[3](ret) end
 					 end
-					)
+               )
       tlw.Lines[i].Columns[2]:SetHidden(false)
    end
    
@@ -152,7 +199,6 @@ end
 
 function KC_G.statsWindowGUISetup()
    if stats_window == nil then return end
-
    --KC_G.KCMenuSetup()
 
    --KillCounter_Stats_BG:SetCenterTexture("esoui/art/ava/ava_allianceflag_aldmeri")
@@ -229,8 +275,6 @@ function KC_G.statsWindowGUISetup()
 	    end
 	    tlw.Lines[i].Columns[j]:SetAnchor(TOPLEFT,tlw.Lines[i].Columns[j-1],TOPLEFT, (tlw.Lines[i]:GetWidth()/3),oy)
 	 end
-
-
 
 
 	 if i==1 then
@@ -420,7 +464,7 @@ function KC_G.statsWindowGUISetup()
 	       end
 	       KC_G.UpdateKillsTable()
 	    end
-	 end
+    end
 
 	 
 	 --tkw.Lines[i].Columns[j]:SetText("Column")
@@ -705,18 +749,16 @@ function KC_G.statsWindowGUISetup()
 			    tlw.DataOffset = math.min(value,KC_Fn.tablelength(tlw.DataLines) - tlw.MaxLines)
 			    KC_G.UpdateDeathsTable()
    end)
-   
-
 
    for i=1,tdw.MaxLines do
       tdw.Lines[i] = WINDOW_MANAGER:CreateControlFromVirtual("KillCounter_Deaths_Table_Line_" .. i, tdw, "KillCounter_Kills_Table_Line")
-      tdw.Lines[i]:SetDimensions(tdw:GetWidth()-10,25)
+      tdw.Lines[i]:SetDimensions(tdw:GetWidth()-10,25) -- this
       if i == 1 then
 	 tdw.Lines[i]:SetAnchor(TOPLEFT,tdw,TOPLEFT,0,5)
       else
 	 tdw.Lines[i]:SetAnchor(TOPLEFT,tdw.Lines[i-1],BOTTOMLEFT,0,3)
       end
-
+         
       local index = i
       tdw.Lines[i].Columns = {}
       for j=1,tdw.MaxColumns do 
@@ -730,11 +772,11 @@ function KC_G.statsWindowGUISetup()
 	    oy = 3
 	    
 	 end
-	 tdw.Lines[i].Columns[j]:SetDimensions(tdw.Lines[i]:GetWidth()/3,25)
+	 tdw.Lines[i].Columns[j]:SetDimensions(tdw.Lines[i]:GetWidth()/3,25)  -- this
 	 if i==1 then
 	    local sw, wh = tdw.Lines[i].Columns[j]:GetTextDimensions()
 	    --d(wh)
-	    tdw.Lines[i].Columns[j]:SetDimensions(sw,25)
+	    tdw.Lines[i].Columns[j]:SetDimensions(sw,25) -- this
 	    if j == 1 then
 	       tdw.Lines[i].Columns[j]:SetAnchor(TOPLEFT,tdw.Lines[i],TOPLEFT,18,0)
 	    else
@@ -767,7 +809,8 @@ function KC_G.statsWindowGUISetup()
 	       end
 	       KC_G.UpdateDeathsTable()
 	    end
-	 end
+    end
+    --Killers Menu
 	 --tdw.Lines[i].Columns[j]:SetText("Column")
 	 if i == 1 then
 	    if j == 1 then 
@@ -791,8 +834,19 @@ function KC_G.statsWindowGUISetup()
 	       tdw.Lines[i].Columns[j].SortButton.Desc = false
 	       tdw.Lines[i].Columns[j].SortButton:SetHandler("OnClicked",SortBy(KilledBy))
 	       tdw.Lines[i].Columns[j].SortButton:SetHidden(false)
-	    end
+       end
 	    if j == 3 then 
+         tdw.Lines[i].Columns[j]:SetText("Kills On Them")
+         tdw.Lines[i].Columns[j].SortButton = WINDOW_MANAGER:CreateControl(nil,tdw.Lines[i].Columns[j],CT_BUTTON)
+
+         tdw.Lines[i].Columns[j].SortButton:SetWidth(tdw.Lines[i].Columns[j]:GetWidth())
+         tdw.Lines[i].Columns[j].SortButton:SetHeight(tdw.Lines[i].Columns[j]:GetHeight())
+         tdw.Lines[i].Columns[j].SortButton:SetAnchor(TOPLEFT,tdw.Lines[i].Columns[j],TOPLEFT,0,0)
+         tdw.Lines[i].Columns[j].SortButton.Desc = false
+         tdw.Lines[i].Columns[j].SortButton:SetHandler("OnClicked", SortBy(Kills))
+         tdw.Lines[i].Columns[j].SortButton:SetHidden(false)
+      end
+	    if j == 4 then 
 	       tdw.Lines[i].Columns[j]:SetText("Class")
 	       tdw.Lines[i].Columns[j].SortButton = WINDOW_MANAGER:CreateControl(nil,tdw.Lines[i].Columns[j],CT_BUTTON)
 
@@ -803,7 +857,7 @@ function KC_G.statsWindowGUISetup()
 	       tdw.Lines[i].Columns[j].SortButton:SetHandler("OnClicked", SortBy(Class))
 	       tdw.Lines[i].Columns[j].SortButton:SetHidden(false)
 	    end
-	    if j == 4 then 
+	    if j == 5 then 
 	       tdw.Lines[i].Columns[j]:SetText("Alliance")
 	       tdw.Lines[i].Columns[j].SortButton = WINDOW_MANAGER:CreateControl(nil,tdw.Lines[i].Columns[j],CT_BUTTON)
 
@@ -813,7 +867,8 @@ function KC_G.statsWindowGUISetup()
 	       tdw.Lines[i].Columns[j].SortButton.Desc = false
 	       tdw.Lines[i].Columns[j].SortButton:SetHandler("OnClicked",SortBy(Alliance))
 	       tdw.Lines[i].Columns[j].SortButton:SetHidden(false)
-	    end
+       end
+       --[[
 	    if j == 5 then 
 	       tdw.Lines[i].Columns[j]:SetText("Level")
 	       tdw.Lines[i].Columns[j].SortButton = WINDOW_MANAGER:CreateControl(nil,tdw.Lines[i].Columns[j],CT_BUTTON)
@@ -824,7 +879,8 @@ function KC_G.statsWindowGUISetup()
 	       tdw.Lines[i].Columns[j].SortButton.Desc = false
 	       tdw.Lines[i].Columns[j].SortButton:SetHandler("OnClicked",SortBy(Level))
 	       tdw.Lines[i].Columns[j].SortButton:SetHidden(false)
-	    end
+       end
+       ]]
 	    --
 	 else
 	    if j==1 then
@@ -917,7 +973,7 @@ function KC_G.statsWindowGUISetup()
 	    tbw.Lines[i].Columns[j]:SetAnchor(TOPLEFT,tbw.Lines[i].Columns[j-1],TOPLEFT, (tbw.Lines[i]:GetWidth()/2),0)
 	 end
 
-
+--[[Stats Breakdown Tab]]--
 	 if i==1 then
 	    if j==1 then tbw.Lines[i].Columns[j]:SetText("Most Killed Player") end
 	    if j==2 then tbw.Lines[i].Columns[j]:SetText(" ") end
@@ -927,7 +983,7 @@ function KC_G.statsWindowGUISetup()
 	       if j==2 then tbw.Lines[i].Columns[j]:SetText(" ") end
 	    end
 	    if i==3 then
-	       if j==1 then tbw.Lines[i].Columns[j]:SetText("Total Players Killed") end
+	       if j==1 then tbw.Lines[i].Columns[j]:SetText("Total Unique Players Killed") end
 	       if j==2 then tbw.Lines[i].Columns[j]:SetText(" ") end
 	    end
 	    if i==4 then
@@ -947,7 +1003,7 @@ function KC_G.statsWindowGUISetup()
 	       if j==2 then tbw.Lines[i].Columns[j]:SetText(" ") end
 	    end
 	    if i==8 then
-	       if j==1 then tbw.Lines[i].Columns[j]:SetText("Total Killers") end
+	       if j==1 then tbw.Lines[i].Columns[j]:SetText("Total Unique Killers") end
 	       if j==2 then tbw.Lines[i].Columns[j]:SetText(" ") end
 	    end
 	    if i==9 then
@@ -1012,7 +1068,7 @@ function KC_G.statsWindowGUISetup()
    tbgw.MaxLines = 13
    --tbgw.DataLines = {}
    tbgw.Lines = {}
-   tbgw:SetHeight(170)
+   tbgw:SetHeight(210)
    tbgw:SetWidth(275)
    tbgw:SetAnchor(TOPLEFT,Scene_KC_Menu_Breakdown,TOPLEFT,600,25)
    tbgw:SetDrawLayer(DL_BACKGROUND)
@@ -1106,7 +1162,7 @@ function KC_G.statsWindowGUISetup()
    tbdgw.MaxLines = 13
    tbdgw.DataLines = {}
    tbdgw.Lines = {}
-   tbdgw:SetHeight(170)
+   tbdgw:SetHeight(210)
    tbdgw:SetWidth(275)
    tbdgw:SetAnchor(TOPLEFT,Scene_KC_Menu_Breakdown,TOPLEFT,600,310)
    tbdgw:SetDrawLayer(DL_BACKGROUND)
@@ -1315,7 +1371,7 @@ function KC_G.statsWindowGUISetup()
 	    tkbsw.Lines[i].Columns[j]:SetAnchor(TOPLEFT,tkbsw.Lines[i-1].Columns[j],BOTTOMLEFT,offx,oy)
 	 end
 
-
+--[[Killing Blows Table]]
 	 --tdw.Lines[i].Columns[j]:SetText("Column")
 	 if i == 1 then
 	    if j == 1 then 
@@ -1534,6 +1590,7 @@ function KC_G.UpdateDeathsTable(...)
    --pk = next(tlw.DataLines, pk)
 
    -- end
+
    local pk = tlw.DataOffset
    --d(#tlw.DataLines, pk)
    for i = 2,tlw.MaxLines do
@@ -1541,13 +1598,16 @@ function KC_G.UpdateDeathsTable(...)
       local curLine = tlw.Lines[i]
       curData = tlw.DataLines[pk + i -1]
       --d(i)
+      --killers data table
       curLine.Columns[1]:SetText(curData[Name])
       curLine.Columns[2]:SetText(curData[KilledBy])
-      curLine.Columns[3]:SetText(zo_strformat("<<1>>",GetClassName(GENDER_MALE,curData[Class])))
-      curLine.Columns[4]:SetText(KC_Fn.Colored_Alliance_From_Id(curData[Alliance]))
-      local level = curData[Level]
-      if curData[Level] == 50 then level = "v" .. curData[vLevel] end
-      curLine.Columns[5]:SetText(level)
+      curLine.Columns[3]:SetText(curData[Kills])
+      curLine.Columns[4]:SetText(zo_strformat("<<1>>",GetClassName(GENDER_MALE,curData[Class])))
+      curLine.Columns[5]:SetText(KC_Fn.Colored_Alliance_From_Id(curData[Alliance]))
+      --[[Level is not using champion system]]
+      --local level = curData[Level]
+      --if curData[Level] == 50 then level = "v" .. curData[vLevel] end
+      --curLine.Columns[5]:SetText(level)
 
 
    end 
@@ -1805,13 +1865,14 @@ function KC_G.UpdateGui()
 			   mostkbs = v[KillingBlows]
 			end
 		     end
-		     if mkplayer[Name] ~= nil and mkplayer[KillingBlows] ~= nil then
-			breakdown_table.Lines[i].Columns[j]:SetText(mkplayer[Name] .. " (" .. mkplayer[KillingBlows] .. " Killing Blows)")
+           if mkplayer[Name] ~= nil and mkplayer[KillingBlows] ~= nil then
+            breakdown_table.Lines[i].Columns[j]:SetText(mkplayer[Name] .. " (" .. mkplayer[KillingBlows] .. " KBs)")
 		     end
 		  end
 
 	       end
-	       if i==3 then
+          if i==3 then
+
 		  if j==2 then 
 		     local uniqueKilledPlayers = 0
 		     for _,v in pairs(KC_G.savedVars.players) do
@@ -1843,7 +1904,7 @@ function KC_G.UpdateGui()
 		     if ep == max then
 			breakdown_table.Lines[i].Columns[j]:SetText("Ebonheart Pact" .. " (" .. max .. " Kills)")
 		     elseif dc == max then
-			breakdown_table.Lines[i].Columns[j]:SetText("Dagerfall Covenant" .. " (" .. max .. " Kills)")
+			breakdown_table.Lines[i].Columns[j]:SetText("Daggerfall Covenant" .. " (" .. max .. " Kills)")
 		     elseif ad == max then
 			breakdown_table.Lines[i].Columns[j]:SetText("Aldmeri Dominion" .. " (" .. max .. " Kills)")
 		     end
@@ -1973,7 +2034,7 @@ function KC_G.UpdateGui()
 		     if ep == max then
 			breakdown_table.Lines[i].Columns[j]:SetText("Ebonheart Pact" .. " (" .. max .. " Kills)")
 		     elseif dc == max then
-			breakdown_table.Lines[i].Columns[j]:SetText("Dagerfall Covenant" .. " (" .. max .. " Kills)")
+			breakdown_table.Lines[i].Columns[j]:SetText("Daggerfall Covenant" .. " (" .. max .. " Kills)")
 		     elseif ad == max then
 			breakdown_table.Lines[i].Columns[j]:SetText("Aldmeri Dominion" .. " (" .. max .. " Kills)")
 		     end
@@ -2127,18 +2188,17 @@ function KC_G.UpdateGui()
       --============================================================
       local deathList = KC_G.Percentages(KC_G.savedVars.players, KilledBy)
 
-      --Warden label
-
-      breakdown_death_graph.Warden.Label:SetText(string.format("|Cababab%s: %.2f%% %d Deaths|r",zo_strformat("<<1>>", GetClassName(GENDER_MALE,KC_CLASS_WARDEN)),
-							       deathList.wardp*100 ,deathList[KC_CLASS_WARDEN]))
-      breakdown_death_graph.Warden:SetDimensions(((breakdown_graph:GetWidth()*.75)-10) * deathList.wardp,30)
-
       --Necromancer label
 
       breakdown_death_graph.Necromancer.Label:SetText(string.format("|Cababab%s: %.2f%% %d Deaths|r",zo_strformat("<<1>>", GetClassName(GENDER_MALE,KC_CLASS_NECROMANCER)),
 							       deathList.necrop*100 ,deathList[KC_CLASS_NECROMANCER]))
       breakdown_death_graph.Necromancer:SetDimensions(((breakdown_graph:GetWidth()*.75)-10) * deathList.necrop,30) 
+      --Warden label
 
+      breakdown_death_graph.Warden.Label:SetText(string.format("|Cababab%s: %.2f%% %d Deaths|r",zo_strformat("<<1>>", GetClassName(GENDER_MALE,KC_CLASS_WARDEN)),
+							       deathList.wardp*100 ,deathList[KC_CLASS_WARDEN]))
+      breakdown_death_graph.Warden:SetDimensions(((breakdown_graph:GetWidth()*.75)-10) * deathList.wardp,30)
+           
       --DragonKnight label
       
       breakdown_death_graph.DragonKnight.Label:SetText(string.format("|Cababab%s: %.2f%% %d Deaths|r",zo_strformat("<<1>>", GetClassName(GENDER_MALE,KC_CLASS_DRAGONKNIGHT)),
@@ -2290,7 +2350,7 @@ function KC_G.ShowPlayer(player)
    end
 
    if level ~= 0 then
-      player_view_window.LevelLabel:SetText("Level: " .. level)
+      --player_view_window.LevelLabel:SetText("Level: " .. level)
    else
       player_view_window.LevelLabel:SetText("")
    end
@@ -2315,6 +2375,7 @@ function KC_G.ClosePlayer()
 
    player_view_window:SetHidden(true)
 end
+
 
 
 ---LibMainMenu
@@ -2449,6 +2510,7 @@ function KC_G.KCMenuSetup()
    KILLCOUNTER_DEATHS_SCENE_TITLE_FRAGMENT = ZO_SetTitleFragment:New(SI_KILLCOUNTER_DEATHS_MENU_TITLE) 
    KILLCOUNTER_DEATHS_SCENE:AddFragment(KILLCOUNTER_DEATHS_SCENE_TITLE_FRAGMENT)
    
+   
    -- Add the XML to our scene
    KILLCOUNTER_DEATHS_WINDOW = ZO_FadeSceneFragment:New(Scene_KC_Menu_Deaths)
    KILLCOUNTER_DEATHS_SCENE:AddFragment(KILLCOUNTER_DEATHS_WINDOW)
@@ -2544,37 +2606,37 @@ function KC_G.KCMenuSetup()
       {
 	 categoryName = SI_KILLCOUNTER_MAIN_MENU_TITLE, -- the title at the right (near the buttons)
 	 descriptor = "KillCounterMain",
+	 normal = "/esoui/art/campaign/overview_indexicon_emperor_up.dds", --up
+	 pressed = "/esoui/art/campaign/overview_indexicon_emperor_down.dds", --down
+	 highlight = "/esoui/art/campaign/overview_indexicon_emperor_over.dds", --over
+      },
+      {
+	 categoryName = SI_KILLCOUNTER_IMPORT_MENU_TITLE, -- the title at the right (near the buttons)
+	 descriptor = "KillCounterSession",
 	 normal = "/esoui/art/campaign/campaign_tabicon_browser_up.dds",
 	 pressed = "/esoui/art/campaign/campaign_tabicon_browser_down.dds",
 	 highlight = "/esoui/art/campaign/campaign_tabicon_browser_over.dds",
       },
       {
-	 categoryName = SI_KILLCOUNTER_IMPORT_MENU_TITLE, -- the title at the right (near the buttons)
-	 descriptor = "KillCounterSession",
-	 normal = "/esoui/art/charactercreate/charactercreate_raceicon_up.dds",
-	 pressed = "/esoui/art/charactercreate/charactercreate_raceicon_down.dds",
-	 highlight = "/esoui/art/charactercreate/charactercreate_raceicon_over.dds",
-      },
-      {
 	 categoryName = SI_KILLCOUNTER_KILLS_MENU_TITLE, -- the title at the right (near the buttons)
 	 descriptor = "KillCounterKills",
 	 normal = "/esoui/art/campaign/campaign_tabicon_leaderboard_up.dds",
-	 pressed = "/esoui/art/campaign/campaign_tabicon_down_up.dds",
+	 pressed = "/esoui/art/campaign/campaign_tabicon_down.dds",
 	 highlight = "/esoui/art/campaign/campaign_tabicon_leaderboard_over.dds",
       },
       {
 	 categoryName = SI_KILLCOUNTER_DEATHS_MENU_TITLE, -- the title at the right (near the buttons)
 	 descriptor = "KillCounterDeaths",
-	 normal = "/esoui/art/campaign/campaignbrowser_indexicon_specialevents_up.dds",
-	 pressed = "/esoui/art/campaign/campaignbrowser_indexicon_specialevents_down.dds",
-	 highlight = "/esoui/art/campaign/campaignbrowser_indexicon_specialevents_over.dds",
+	 normal = "/esoui/art/treeicons/tutorial_idexicon_death_up.dds", --up
+	 pressed = "/esoui/art/treeicons/tutorial_idexicon_death_down.dds", -- down
+	 highlight = "/esoui/art/treeicons/tutorial_idexicon_death_over.dds", --over
       },
       {
 	 categoryName = SI_KILLCOUNTER_BREAKDOWN_MENU_TITLE, -- the title at the right (near the buttons)
 	 descriptor = "KillCounterBreakdown",
-	 normal = "/esoui/art/campaign/campaign_tabicon_history_up.dds",
-	 pressed = "/esoui/art/campaign/campaign_tabicon_history_down.dds",
-	 highlight = "/esoui/art/campaign/campaign_tabicon_history_over.dds",
+	 normal = "/esoui/art/journal/journal_tabicon_cadwell_up.dds",
+	 pressed = "/esoui/art/journal/journal_tabicon_cadwell_down.dds",
+	 highlight = "/esoui/art/journal/journal_tabicon_cadwell_over.dds",
       },
       {
 	 categoryName = SI_KILLCOUNTER_SPELLS_MENU_TITLE, -- the title at the right (near the buttons)

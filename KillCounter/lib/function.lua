@@ -56,7 +56,6 @@ function KC_Fn.table_randFrom( t )
     return choice 
 end
 
-
 -- Remove duplicates from a table array (doesn't currently work
 -- on key-value tables)
 function KC_Fn.table_unique(tt)
@@ -83,7 +82,7 @@ function KC_Fn.Alliance_From_Id(id, color)
   elseif id == ALLIANCE_DAGGERFALL_COVENANT then 
     alli = "Daggerfall Covenant"
     colorcode = "|C0066ff"
-  else return "No One"
+  else return "|CA9A9A9Duel"
   end
 
   return colorcode..alli .. "|r"
@@ -93,7 +92,7 @@ function KC_Fn.Colored_Alliance_From_Id(id)
   if id == ALLIANCE_EBONHEART_PACT or id == "Ebonheart Pact" then return "|C990000EP"
   elseif id == ALLIANCE_ALDMERI_DOMINION or id == "Aldmeri Dominion" then return "|CFFCC00AD"
   elseif id == ALLIANCE_DAGGERFALL_COVENANT or id == "Daggerfall Covenant" then return "|C0066ffDC"
-  else return id
+  else return "|CA9A9A9Duel"
   end
 end
 
@@ -264,8 +263,4 @@ function KC_Fn.updateSaved(currentSaved, updatedFormat, innerFormats)
   return t
 
 end
-
-
-
-
 --]]
