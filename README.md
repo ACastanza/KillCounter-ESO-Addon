@@ -2,7 +2,7 @@
 
 ## UPDATE LOG
 3.2.3
-Fixed a minor mathematical bug.
+- Fixed a minor mathematical bug.
 
 3.2.2
 - Added K/D ratio levels in Current Sessions Tab
