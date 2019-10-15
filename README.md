@@ -1,4 +1,32 @@
 # KillCounter ESO Addon
+link: https://www.esoui.com/downloads/fileinfo.php?id=337#info
+
+Kill Counter is an add-on that Tracks Kills in PVP and other PVP achievements.
+It also has Deathmatch/MOBA style Kill streak alerts (Like "Killing Spree" or "Dominating")
+as well as death streaks, and capture streaks (Keeps and resources). Kill Counter
+also alerts you when a Keep or resource has been captured (50% full). It features an
+unobtrusive GUI element for quick view of your current session kills, deaths, Kill/Death ratio,
+and Streaks. Individual kills also have their own alerts, with an added sound for that extra level
+of satisfaction! All Alerts are fully customizable and can be toggled on/off via the Kill Counter
+settings menu (/kc settings, see below).
+
+The GUI element can be dragged to a different place by clicking and dragging the right half of the display bar.
+
+[B]Kill Counter also has a Full stats menu which lists has multiple distinct sections[/B]
+  1) Overview :: Overview of all stats (totals, KDR, siege stats, etc).
+  2) Current Session :: List of earnings, kills, killing blows etc, since the last time you logged out... or crashed.
+  3) Kill History :: All data on kills and killing blows that wasn't lost to game crashes...
+  4) Killed By History :: Summary of players that have killed you.
+  5) Breakdown :: Summations/Averages/Other break downs of your stats.
+  6) Killing Blow History :: The number of kills achieved with each skill you have used.
+  7) Settings :: Custom settings window. It was already here so I used it. Eventually, I'll try to move it to the standard location.
+
+
+Kill Counter has always served as a way to track your overall
+performance and your performance against other players, other add-ons
+such as Miat's provide far more involved additions to the UI, while KC
+tries to be unintrusive.
+
 ## Planned Updates
 - Searching Kills, this is far down the line but still being worked on
 - Background image changes for the menu
