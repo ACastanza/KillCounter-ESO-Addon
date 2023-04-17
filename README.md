@@ -33,6 +33,64 @@ tries to be unintrusive.
 - Dueling Mode, being looked into
 
 ## UPDATE LOG
+
+3.4.
+(Note: This is mainly for PTS, but will work with the launch of the Chapter)
+[Arcanist Class Added]
+- Arcanist Class Added
+- Fixes an issue where some of Necromancers abilities were not counted correctly
+- Code Cleaned & Fixed up for easier reading for future updates
+
+3.3.4
+- API bump
+- Got KC to Work Again
+
+
+3.3.3
+- LibMainMenu - Deprecated, updated to LibMainMenu 2
+- Fixed the deprecated files
+- API Bump
+
+3.3.2
+- API Bump, fixed minor issues
+- "/kcreport", "/kcreport full" now initially report in /say
+- "/kcreport", "/kcreport full" both report killing blows, full is overall while /kcreport is current
+- Optimized the killing timer
+
+3.3.1
+API bump
+
+3.3.0
+- Fixed minor issues with error calling before addon loaded.
+- (note, untested, if a bug occurs let me know)
+
+3.2.8:
+MAJOR ADD-ON OVERHAUL!
+- This is no longer a standalone and needs LibAddonMenu 2 and LibMainMenu.
+- Fixes an issue where current data was not stored in a timely matter so if you crashed, you'd lose the data. IOt now updates per kill/death to retain data
+
+
+3.2.7:
+[Minor bug fix]
+
+3.2.6
+- Minor Bug Fix, if you deposit AP to bank you'll no longer go negative
+- note: I'm aware of a few issues and will work on them slowly, but due to a new job I won't have as much time for a while.
+
+3.2.5
+API Bump
+
+3.2.4
+- Added K/D ratio levels in Overview Stats
+- God Mode (Gold) - 10+K/D
+- Beast Mode (Orange ) - 5+K/D
+- Super Mode (Blue) - 2.5+K/D
+- .7-2.5 Green
+- between .5-.7 Yellow
+- below .5 Red
+-- note: you should now see colored K/D for your overview stats. This is to encourage people to care more about their K/D!
+- Completely overhauled the code base to be standard formatting. This should help with adjust code going forward
+
 3.2.3
 - Fixed a minor mathematical bug.
 
