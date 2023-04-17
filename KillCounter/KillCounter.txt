@@ -1,17 +1,10 @@
 ## Title: Kill Counter
-## APIVersion: 100028
+## APIVersion: 101037, 101038
 ## SavedVariables: KillCounter_Data
 ## Description: Tracks Kills, Kill Streaks, Keep Takes, and more.
 ## Author: @Casterial, (Old:@Drummerx04,Mikethecoder4)
+## DependsOn: LibAddonMenu-2.0 LibMainMenu-2.0>=40400
 
-
-
-lib/LibStub/LibStub/LibStub.lua
-lib/LibMainMenu/LibMainMenu.lua
-lib/LibAddonMenu-2.0/LibAddonMenu-2.0.lua
-lib/LibAddonMenu-2.0/controls/panel.lua
-lib/LibAddonMenu-2.0/controls/header.lua
-lib/LibAddonMenu-2.0/controls/editbox.lua
 
 KillCounter.lua
 keepcounter.lua

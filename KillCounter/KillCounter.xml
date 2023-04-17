@@ -2,7 +2,7 @@
   <Controls >
     <TopLevelControl  name="KillCounter" mouseEnabled="true" movable="true">
       <Dimensions x="410" y="25" />
-      <Anchor point="TOPRIGHT" offsetX="" offsetY="0" />
+      <Anchor point="TOPRIGHT" offsetX="0" offsetY="0" />
       
       <!-- <OnUpdate> -->
       <!--     KC_G.AddOnUpdate() -->
@@ -16,9 +16,9 @@
         KC_G.OnInitialized()
       </OnInitialized>
       
-      <Controls> <--textureFile="/esoui/art/actionbar/abilityinset.dds"-->
-        <Backdrop name="$(parent)_BG" inherits="ZO_ThinBackdrop" verticalAlignment="CENTER" edgeColor="241F1F" centerColor="241F1F" horizontalAlignment="CENTER" alpha="0.95">
-	  <Dimensions x="410" y="25" />
+	<Controls>
+         <Backdrop name="$(parent)_BG" inherits="ZO_ThinBackdrop" verticalAlignment="CENTER" edgeColor="241F1F" centerColor="241F1F" horizontalAlignment="CENTER" alpha="0.95">
+ 	  <Dimensions x="410" y="25" />
 	</Backdrop>
         <Label name="$(parent)_Kills" font="ZoFontChat" color="CFDCBD" wrapMode="ELLIPSIS" verticalAlignment="LEFT" text="Kills : ">
           <AnchorFill />

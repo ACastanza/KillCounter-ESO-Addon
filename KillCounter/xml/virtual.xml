@@ -146,7 +146,15 @@
                 </Texture>
             </Controls>
         </Control> 		
-	
+	<Control name="KillCounter_Graph_Line_Arcanist" virtual="true">
+            <Controls>
+
+                <Texture name="$(parent)_Texture" layer="BACKGROUND" hidden="false" virtual="false" alpha="0.8" color="1ED400" >
+                            
+                    <AnchorFill/>
+                </Texture>
+            </Controls>
+        </Control>
 
         <TopLevelControl name="KillCounter_Player_View" mouseEnabled="true" virtual="true" movable="true">
             <Dimensions x="350" y="400" />
