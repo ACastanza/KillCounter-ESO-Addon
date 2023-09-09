@@ -60,7 +60,7 @@ function KC_G.CreateConfigMenuX()
         type = "panel",
         name = "Kill Counter",
         displayName = "|cdb1414Kill Counter|r",
-        author = "@Casterial, @drummerx04, @g4rr3t"
+        author = "@Casterial, @drummerx04, @g4rr3t",
         version = "3.4.5",
         website = "https://www.esoui.com/downloads/info337-KillCounter.html"
     }
