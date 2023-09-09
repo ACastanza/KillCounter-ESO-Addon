@@ -35,7 +35,7 @@ local KC_CLASS_NIGHTBLADE = 3
 local KC_CLASS_WARDEN = 4
 local KC_CLASS_NECROMANCER = 5
 local KC_CLASS_TEMPLAR = 6
-local KC_CLASS_ARCANIST = 7
+local KC_CLASS_ARCANIST = 7 --TBD
 local stats_killed_array = {}
 local stats_killed_labels = {}
 
@@ -60,8 +60,8 @@ function KC_G.CreateConfigMenuX()
         type = "panel",
         name = "Kill Counter",
         displayName = "|cdb1414Kill Counter|r",
-        author = "Casterial",
-        version = "3.4.0",
+        author = "@Casterial, @drummerx04, @g4rr3t"
+        version = "3.4.5",
         website = "https://www.esoui.com/downloads/info337-KillCounter.html"
     }
     LAM2:RegisterAddonPanel(KC_G.name .. "Config", panelData)
