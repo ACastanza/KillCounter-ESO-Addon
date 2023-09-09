@@ -373,9 +373,11 @@ function KC_G.OnKilled(eventCode)
             end
         end
         KC_G.UpdateSessionData()
-        d(string.format("|C870505You were killed by|r %s%s|r.",
-                        KC_Fn.Alliance_Color(alliance),
-                        ZO_LinkHandler_CreatePlayerLink(killer)))
+        if KC_Fn.CheckSetting("ChatDeaths") then
+            d(string.format("|C870505You were killed by|r %s%s|r.",
+                            KC_Fn.Alliance_Color(alliance),
+                            ZO_LinkHandler_CreatePlayerLink(killer)))
+        end
         KC_G.UpdateDisplayText()
     end
 end
@@ -1141,7 +1143,7 @@ end
 
 -- function KC_doDeathStreakEnd()
 function KC_G.doDeathStreakEnd()
-    if deathStreak > 0 then
+    if deathStreak > 0 and KC_Fn.CheckSetting("ChatDStreak") then
         d("Your death streak of " .. deathStreak .. " has ended!")
     end
     deathStreak = 0
