@@ -1,5 +1,5 @@
 ## Title: Kill Counter
-## APIVersion: 101039
+## APIVersion: 101040 101041
 ## SavedVariables: KillCounter_Data
 ## Description: Tracks Kills, Kill Streaks, Keep Takes, and more.
 ## Author: @Casterial, Drummerx04 Attributors: @g4rr3t, @Mikethecoder4

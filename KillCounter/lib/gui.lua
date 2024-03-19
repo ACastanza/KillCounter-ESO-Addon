@@ -28,14 +28,14 @@ local showingSettings = false
 -- 4 Warden
 -- 5 Necromancer
 -- 6 Templar
--- 7 Arcanist
+-- 117 Arcanist ?????ZOS?????
 local KC_CLASS_DRAGONKNIGHT = 1
 local KC_CLASS_SORCERER = 2
 local KC_CLASS_NIGHTBLADE = 3
 local KC_CLASS_WARDEN = 4
 local KC_CLASS_NECROMANCER = 5
 local KC_CLASS_TEMPLAR = 6
-local KC_CLASS_ARCANIST = 7 --TBD
+local KC_CLASS_ARCANIST = 117 -- becuz sparta?
 local stats_killed_array = {}
 local stats_killed_labels = {}
 
@@ -61,7 +61,7 @@ function KC_G.CreateConfigMenuX()
         name = "Kill Counter",
         displayName = "|cdb1414Kill Counter|r",
         author = "@Casterial, @drummerx04, @g4rr3t",
-        version = "3.4.5",
+        version = "3.5.0",
         website = "https://www.esoui.com/downloads/info337-KillCounter.html"
     }
     LAM2:RegisterAddonPanel(KC_G.name .. "Config", panelData)
@@ -1230,7 +1230,7 @@ function KC_G.statsWindowGUISetup()
     tbgw.MaxLines = 13
     -- tbgw.DataLines = {}
     tbgw.Lines = {}
-    tbgw:SetHeight(210)
+    tbgw:SetHeight(245)
     tbgw:SetWidth(275)
     tbgw:SetAnchor(TOPLEFT, Scene_KC_Menu_Breakdown, TOPLEFT, 600, 25)
     tbgw:SetDrawLayer(DL_BACKGROUND)
@@ -1331,7 +1331,7 @@ function KC_G.statsWindowGUISetup()
     tbdgw.MaxLines = 13
     tbdgw.DataLines = {}
     tbdgw.Lines = {}
-    tbdgw:SetHeight(210)
+    tbdgw:SetHeight(245)
     tbdgw:SetWidth(275)
     tbdgw:SetAnchor(TOPLEFT, Scene_KC_Menu_Breakdown, TOPLEFT, 600, 310)
     tbdgw:SetDrawLayer(DL_BACKGROUND)
