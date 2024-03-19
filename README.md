@@ -33,6 +33,15 @@ tries to be unintrusive.
 - Dueling Mode, being looked into
 
 ## UPDATE LOG
+3.5.0
+- Fixed class code, Sparta 117!
+
+3.4.6
+- Comma Fix
+
+3.4.5
+- Fixed Displaying Killed Messages
+- Attributor & Bug Squasher: @g4rr3t
 
 3.4.
 (Note: This is mainly for PTS, but will work with the launch of the Chapter)
