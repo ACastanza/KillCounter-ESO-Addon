@@ -676,6 +676,7 @@ function KC_G.OnCharacterLoad(eventCode, initialLoad)
             EVENT_MANAGER:RegisterForEvent(KC_G.name,
                                            EVENT_OBJECTIVE_CONTROL_STATE,
                                            SC_G.ObjectiveControlState)
+            KC_G.backupStats()
         end
     elseif KC_ON then
         KC_G.show()
@@ -828,6 +829,9 @@ function KC_G.OnInitialized(self)
             KC_G.statsResetFull()
             d("Stats Fully Reset")
             SC_G.ResetSeigeStats()
+        elseif extra == "session" then
+            KC_G.statsResetSession()
+            d("Session Stats Reset")
         else
             d("Current Stats Reset")
         end
@@ -1151,6 +1155,22 @@ function KC_G.doDeathStreakEnd()
     deathStreak = 0
 end
 
+function KC_G.backupStats()
+    local sDisplayName = GetDisplayName()
+    local sUnitName = GetUnitName("player")
+    KC_G.statsBackup = ZO_DeepTableCopy(_G["KillCounter_Data"]["Default"][sDisplayName][sUnitName])
+end
+
+function KC_G.statsResetSession()
+    local sDisplayName = GetDisplayName()
+    local sUnitName = GetUnitName("player")
+    ZO_ClearTable(KC_G.savedVars)
+    ZO_DeepTableCopy(KC_G.statsBackup, _G["KillCounter_Data"]["Default"][sDisplayName][sUnitName])
+    -- KC_G.loadKilled()
+    -- d("saved vars: " .. #KC_G.savedVars.Killed)
+    KC_G.updateStats(true)
+end
+
 -- function KC_statsResetFull()
 function KC_G.statsResetFull()
     local defaultValues = ZO_DeepTableCopy(defaults)
@@ -1166,6 +1186,7 @@ function KC_G.statsResetFull()
     KC_G.savedVars.longestDeathStreak = defaultValues.longestDeathStreak
     -- KC_G.loadKilled()
     -- d("saved vars: " .. #KC_G.savedVars.Killed)
+    KC_G.backupStats()
     KC_G.updateStats(true)
 end
 
