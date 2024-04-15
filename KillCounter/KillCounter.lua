@@ -91,7 +91,7 @@ KC_G = {
     savedVars = {},
     -- svDefaults = defaults,
     SC = defaults.SC,
-    
+    statsBackup = {},
 }
 
 function KC_G.GetCounter() return counter end
