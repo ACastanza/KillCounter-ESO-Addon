@@ -88,8 +88,9 @@ local defaults = {
 
 KC_G = {
     name = "KillCounter",
-    savedVars = {}
-    -- svDefaults = defaults
+    savedVars = {},
+    -- svDefaults = defaults,
+    SC = defaults.SC
 }
 
 function KC_G.GetCounter() return counter end

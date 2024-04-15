@@ -354,7 +354,7 @@ end
 
 function SC_G.ResetSeigeStats()
     SC_G.resetStreaks()
-    KC_G.savedVars.SC = KC_Fn.table_shallow_copy(KC_G.svDefaults.SC)
+    KC_G.savedVars.SC = KC_G.SC
 end
 -- control stat fires before capture area status, but capstatus only happens when you are there.
 
