@@ -90,7 +90,8 @@ KC_G = {
     name = "KillCounter",
     savedVars = {},
     -- svDefaults = defaults,
-    SC = defaults.SC
+    SC = defaults.SC,
+    
 }
 
 function KC_G.GetCounter() return counter end
@@ -1152,11 +1153,17 @@ end
 
 -- function KC_statsResetFull()
 function KC_G.statsResetFull()
-    KC_G.savedVars.players = {}
-    KC_G.savedVars.totalKills = 0
-    KC_G.savedVars.totalDeaths = 0
-    KC_G.savedVars.longestStreak = 0
-    KC_G.savedVars.longestDeathStreak = 0
+    local defaultValues = ZO_DeepTableCopy(defaults)
+    KC_G.savedVars.SC = defaultValues.SC
+    KC_G.savedVars.kbSpells = defaultValues.kbSpells
+    KC_G.savedVars.longestKBStreak = defaultValues.longestKBStreak
+    KC_G.savedVars.players = defaultValues.players
+    KC_G.savedVars.rankPointsGained = defaultValues.rankPointsGained
+    KC_G.savedVars.longestStreak = defaultValues.longestStreak
+    KC_G.savedVars.totalKills = defaultValues.totalKills
+    KC_G.savedVars.totalDeaths = defaultValues.totalDeaths
+    KC_G.savedVars.totalKillingBlows = defaultValues.totalKillingBlows
+    KC_G.savedVars.longestDeathStreak = defaultValues.longestDeathStreak
     -- KC_G.loadKilled()
     -- d("saved vars: " .. #KC_G.savedVars.Killed)
     KC_G.updateStats(true)
